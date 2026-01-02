@@ -377,53 +377,52 @@ def main():
     with st.sidebar:
         st.markdown("## ⚙️ Configuration")
         
-        # JavaScript for auto-formatting numbers
-        st.markdown("""
-        <script>
-        function autoFormatNumber() {
-            // Find all text inputs that should be formatted
-            const priceInput = document.querySelector('[data-testid="stTextInput"] input');
-            
-            if (priceInput && !priceInput.dataset.formatted) {
-                priceInput.dataset.formatted = 'true';
-                
-                priceInput.addEventListener('blur', function() {
-                    let value = this.value.replace(/,/g, '');
-                    
-                    if (!isNaN(value) && value !== '') {
-                        // Format with thousand separators and 2 decimals
-                        let num = parseFloat(value);
-                        this.value = num.toLocaleString('en-US', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        });
-                    }
-                });
-                
-                priceInput.addEventListener('focus', function() {
-                    // Remove commas when editing
-                    this.value = this.value.replace(/,/g, '');
-                });
-            }
-        }
         
-        // Run on load and after updates
-        setInterval(autoFormatNumber, 500);
-        </script>
-        """, unsafe_allow_html=True)
+        # Callback functions for auto-formatting
+        def update_price_format():
+            raw_value = st.session_state.get('price_input', '5,000,000.00')
+            try:
+                num = float(raw_value.replace(',', ''))
+                st.session_state.price_formatted = f"{num:,.2f}"
+            except:
+                pass
+        
+        def update_rent_format():
+            raw_value = st.session_state.get('rent_input', '15,000.00')
+            try:
+                num = float(raw_value.replace(',', ''))
+                st.session_state.rent_formatted = f"{num:,.2f}"
+            except:
+                pass
+        
+        def update_expenses_format():
+            raw_value = st.session_state.get('expenses_input', '3,000.00')
+            try:
+                num = float(raw_value.replace(',', ''))
+                st.session_state.expenses_formatted = f"{num:,.2f}"
+            except:
+                pass
+        
+        # Initialize session state
+        if 'price_formatted' not in st.session_state:
+            st.session_state.price_formatted = "5,000,000.00"
+        if 'rent_formatted' not in st.session_state:
+            st.session_state.rent_formatted = "15,000.00"
+        if 'expenses_formatted' not in st.session_state:
+            st.session_state.expenses_formatted = "3,000.00"
         
         with st.expander("🏠 Property Details", expanded=True):
-            property_price_str = st.text_input(
+            st.text_input(
                 "ราคาทรัพย์สิน (Property Price)",
-                value="5000000",
-                help="กรอกตัวเลขอย่างเดียว - จะ format อัตโนมัติเป็น 5,000,000.00",
-                key="property_price_input",
-                placeholder="เช่น: 5000000"
+                value=st.session_state.price_formatted,
+                help="กรอกตัวเลข (เช่น 5000000) แล้วกด Enter → จะเปลี่ยนเป็น 5,000,000.00",
+                key="price_input",
+                on_change=update_price_format
             )
             
-            # Convert to number
+            # Get number for calculation
             try:
-                property_price = float(property_price_str.replace(',', ''))
+                property_price = float(st.session_state.price_formatted.replace(',', ''))
             except:
                 property_price = 5000000.0
             
@@ -456,29 +455,29 @@ def main():
             )
         
         with st.expander("💵 Income & Expenses", expanded=True):
-            monthly_rent_str = st.text_input(
+            st.text_input(
                 "ค่าเช่ารายเดือน (Monthly Rent)", 
-                value="15000",
-                help="กรอกตัวเลขอย่างเดียว - จะ format อัตโนมัติเป็น 15,000.00",
-                key="monthly_rent_input",
-                placeholder="เช่น: 15000"
+                value=st.session_state.rent_formatted,
+                help="กรอกตัวเลข (เช่น 15000) แล้วกด Enter → จะเปลี่ยนเป็น 15,000.00",
+                key="rent_input",
+                on_change=update_rent_format
             )
             
             try:
-                monthly_rent = float(monthly_rent_str.replace(',', ''))
+                monthly_rent = float(st.session_state.rent_formatted.replace(',', ''))
             except:
                 monthly_rent = 15000.0
             
-            monthly_expenses_str = st.text_input(
+            st.text_input(
                 "ค่าใช้จ่ายรายเดือน (Monthly Expenses)", 
-                value="3000",
-                help="กรอกตัวเลขอย่างเดียว - จะ format อัตโนมัติเป็น 3,000.00",
-                key="monthly_expenses_input",
-                placeholder="เช่น: 3000"
+                value=st.session_state.expenses_formatted,
+                help="กรอกตัวเลข (เช่น 3000) แล้วกด Enter → จะเปลี่ยนเป็น 3,000.00",
+                key="expenses_input",
+                on_change=update_expenses_format
             )
             
             try:
-                monthly_expenses = float(monthly_expenses_str.replace(',', ''))
+                monthly_expenses = float(st.session_state.expenses_formatted.replace(',', ''))
             except:
                 monthly_expenses = 3000.0
             
