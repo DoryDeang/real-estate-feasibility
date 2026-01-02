@@ -378,56 +378,15 @@ def main():
         st.markdown("## ⚙️ Configuration")
         
         
-        # Callback functions for auto-formatting
-        def update_price_format():
-            raw_value = st.session_state.get('price_input', '5,000,000.00')
-            try:
-                num = float(raw_value.replace(',', ''))
-                st.session_state.price_formatted = f"{num:,.2f}"
-            except:
-                pass
-        
-        def update_rent_format():
-            raw_value = st.session_state.get('rent_input', '15,000.00')
-            try:
-                num = float(raw_value.replace(',', ''))
-                st.session_state.rent_formatted = f"{num:,.2f}"
-            except:
-                pass
-        
-        def update_expenses_format():
-            raw_value = st.session_state.get('expenses_input', '3,000.00')
-            try:
-                num = float(raw_value.replace(',', ''))
-                st.session_state.expenses_formatted = f"{num:,.2f}"
-            except:
-                pass
-        
-        # Initialize session state
-        if 'price_formatted' not in st.session_state:
-            st.session_state.price_formatted = "5,000,000.00"
-        if 'rent_formatted' not in st.session_state:
-            st.session_state.rent_formatted = "15,000.00"
-        if 'expenses_formatted' not in st.session_state:
-            st.session_state.expenses_formatted = "3,000.00"
         
         with st.expander("🏠 Property Details", expanded=True):
-            # Auto-format on every input change
-            price_input = st.text_input(
+            property_price = st.number_input(
                 "ราคาทรัพย์สิน (Property Price)",
-                value=st.session_state.get('price_formatted', '5,000,000.00'),
-                help="กรอกตัวเลข - จะ format อัตโนมัติ",
-                key="price_input_field"
+                min_value=0.0,
+                value=5000000.0,
+                step=100000.0,
+                help="ราคาซื้อขายทรัพย์สิน (บาท)"
             )
-            
-            # Parse and store
-            try:
-                property_price = float(price_input.replace(',', ''))
-                # Update formatted version for next render
-                st.session_state.price_formatted = f"{property_price:,.2f}"
-            except:
-                property_price = 5000000.0
-                st.session_state.price_formatted = '5,000,000.00'
             
             down_payment = st.number_input(
                 "เงินดาวน์ (Down Payment)",  
@@ -458,33 +417,21 @@ def main():
             )
         
         with st.expander("💵 Income & Expenses", expanded=True):
-            rent_input = st.text_input(
-                "ค่าเช่ารายเดือน (Monthly Rent)", 
-                value=st.session_state.get('rent_formatted', '15,000.00'),
-                help="กรอกตัวเลข - จะ format อัตโนมัติ",
-                key="rent_input_field"
+            monthly_rent = st.number_input(
+                "ค่าเช่ารายเดือน (Monthly Rent)",
+                min_value=0.0,
+                value=15000.0,
+                step=1000.0,
+                help="รายได้จากค่าเช่าต่อเดือน"
             )
             
-            try:
-                monthly_rent = float(rent_input.replace(',', ''))
-                st.session_state.rent_formatted = f"{monthly_rent:,.2f}"
-            except:
-                monthly_rent = 15000.0
-                st.session_state.rent_formatted = '15,000.00'
-            
-            expenses_input = st.text_input(
-                "ค่าใช้จ่ายรายเดือน (Monthly Expenses)", 
-                value=st.session_state.get('expenses_formatted', '3,000.00'),
-                help="กรอกตัวเลข - จะ format อัตโนมัติ",
-                key="expenses_input_field"
+            monthly_expenses = st.number_input(
+                "ค่าใช้จ่ายรายเดือน (Monthly Expenses)",
+                min_value=0.0,
+                value=3000.0,
+                step=500.0,
+                help="ค่าใช้จ่ายในการดูแลรักษาต่อเดือน (ไม่รวมผ่อน)"
             )
-            
-            try:
-                monthly_expenses = float(expenses_input.replace(',', ''))
-                st.session_state.expenses_formatted = f"{monthly_expenses:,.2f}"
-            except:
-                monthly_expenses = 3000.0
-                st.session_state.expenses_formatted = '3,000.00'
             
             vacancy_rate = st.number_input(
                 "อัตราห้องว่าง (Vacancy Rate)", 
