@@ -545,10 +545,7 @@ def main():
         ])
         
         with tab1:
-            # Interactive Chart
-            st.plotly_chart(create_interactive_chart(results['cash_flow_table']), use_container_width=True)
-            
-            # Secondary Metrics
+            # Secondary Metrics (removed confusing chart)
             st.markdown("#### Key Performance Indicators")
             k1, k2, k3, k4 = st.columns(4)
             k1.info(f"**Initial Investment**\n\n฿{results['initial_investment']:,.0f}")
