@@ -561,26 +561,91 @@ def main():
             k4.info(f"**Cap Rate**\n\n{results['cap_rate']:.2f}%")
             
         with tab2:
-            st.markdown("#### Year-by-Year Breakdown")
+            st.markdown("#### 📊 รายละเอียดรายปี (Year-by-Year Breakdown)")
             
-            # Format dataframe for display
+            # Format dataframe for display with Thai headers
             display_df = results['cash_flow_table'].copy()
-            for col in ['Rental Income', 'Expenses', 'Mortgage', 'Cash Flow', 'Cumulative Cash Flow']:
-                display_df[col] = display_df[col].apply(lambda x: f"฿{x:,.0f}")
             
+            # Rename columns to Thai
+            display_df = display_df.rename(columns={
+                'Year': 'ปี',
+                'Rental Income': 'รายได้ค่าเช่า',
+                'Expenses': 'ค่าใช้จ่าย',
+                'Mortgage': 'ผ่อนบ้าน',
+                'Cash Flow': 'กระแสเงินสด',
+                'Cumulative Cash Flow': 'กระแสเงินสดสะสม'
+            })
+            
+            # Apply Excel-like styling
+            def style_dataframe(df):
+                # Create styler object
+                styled = df.style
+                
+                # Format currency columns
+                currency_cols = ['รายได้ค่าเช่า', 'ค่าใช้จ่าย', 'ผ่อนบ้าน', 'กระแสเงินสด', 'กระแสเงินสดสะสม']
+                
+                # Apply number formatting
+                format_dict = {col: '฿{:,.0f}' for col in currency_cols}
+                styled = styled.format(format_dict)
+                
+                # Apply styles
+                styled = styled.set_properties(**{
+                    'background-color': '#1E1E1E',
+                    'color': '#FFFFFF',
+                    'border': '1px solid #3E3E3E',
+                    'text-align': 'right',
+                    'padding': '8px',
+                    'font-size': '14px'
+                })
+                
+                # Header styles
+                styled = styled.set_table_styles([
+                    {'selector': 'th',
+                     'props': [
+                         ('background-color', '#2D2D2D'),
+                         ('color', '#FFFFFF'),
+                         ('font-weight', 'bold'),
+                         ('text-align', 'center'),
+                         ('border', '1px solid #3E3E3E'),
+                         ('padding', '10px'),
+                         ('font-size', '14px')
+                     ]},
+                    {'selector': 'td:first-child',
+                     'props': [
+                         ('text-align', 'center'),
+                         ('font-weight', 'bold'),
+                         ('background-color', '#252525')
+                     ]},
+                    {'selector': 'tr:nth-child(even)',
+                     'props': [('background-color', '#242424')]},
+                    {'selector': 'tr:hover',
+                     'props': [('background-color', '#2A2A2A')]}
+                ])
+                
+                # Highlight negative values in red
+                def highlight_negative(val):
+                    if isinstance(val, (int, float)) and val < 0:
+                        return 'color: #FF4444; font-weight: bold'
+                    elif isinstance(val, (int, float)) and val > 0:
+                        return 'color: #4CAF50'
+                    return ''
+                
+                styled = styled.applymap(highlight_negative, subset=['กระแสเงินสด', 'กระแสเงินสดสะสม'])
+                
+                return styled
+            
+            # Display styled table
             st.dataframe(
-                display_df,
+                style_dataframe(display_df),
                 use_container_width=True,
                 hide_index=True,
-                column_config={
-                    "Year": st.column_config.NumberColumn("Year", format="%d"),
-                }
+                height=400
             )
             
             # Download Button
             csv = results['cash_flow_table'].to_csv(index=False).encode('utf-8')
             st.download_button(
-                "📥 Download Report (CSV)",
+                "📥 ดาวน์โหลดรายงาน (Download Report CSV)",
                 csv,
                 "feasibility_report.csv",
                 "text/csv",
