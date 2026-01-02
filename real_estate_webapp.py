@@ -888,19 +888,70 @@ def main():
 
     else:
         # Welcome State
-        st.info("👈 Please configure your property details in the sidebar and click 'Run Analysis'")
+        st.info("👈 กรุณากรอกข้อมูลทรัพย์สินใน sidebar และกด 'Run Analysis' เพื่อเริ่มการวิเคราะห์")
         
-        # Feature Highlights
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            st.markdown("### 🎯 Precise")
-            st.caption("Industry standard formulas for IRR, NPV, and Cap Rate.")
-        with c2:
-            st.markdown("### 📊 Visual")
-            st.caption("Interactive charts and detailed year-by-year breakdowns.")
-        with c3:
-            st.markdown("### ⚡ Fast")
-            st.caption("Instant calculations with real-time sensitivity analysis.")
+        # Modern Feature Cards with custom CSS
+        st.markdown("""
+        <style>
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin: 0.5rem 0;
+            transition: transform 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #FFFFFF;
+            margin: 0.5rem 0;
+        }
+        .feature-desc {
+            font-size: 0.9rem;
+            color: #E0E0E0;
+            line-height: 1.4;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Feature Cards
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown("""
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">Professional Analysis</div>
+                <div class="feature-desc">วิเคราะห์ด้วยสูตรมาตรฐาน IRR, NPV, Cap Rate</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown("""
+            <div class="feature-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="feature-icon">📈</div>
+                <div class="feature-title">Interactive Charts</div>
+                <div class="feature-desc">กราฟแบบ interactive พร้อม breakdown รายปี</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown("""
+            <div class="feature-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Real-time Results</div>
+                <div class="feature-desc">คำนวณทันที พร้อม sensitivity analysis</div>
+            </div>
+            """, unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
