@@ -377,59 +377,55 @@ def main():
     with st.sidebar:
         st.markdown("## ⚙️ Configuration")
         
-        # Custom CSS for number inputs with thousand separators
+        # JavaScript for auto-formatting numbers
         st.markdown("""
-        <style>
-        .formatted-input input[type="number"] {
-            text-align: right;
-        }
-        /* Hide number input spinners */
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-        </style>
-        
         <script>
-        // Format number inputs with thousand separators
-        function formatNumberInput(input) {
-            let value = input.value.replace(/,/g, '');
-            if (!isNaN(value) && value !== '') {
-                input.value = parseFloat(value).toLocaleString('en-US');
+        function autoFormatNumber() {
+            // Find all text inputs that should be formatted
+            const priceInput = document.querySelector('[data-testid="stTextInput"] input');
+            
+            if (priceInput && !priceInput.dataset.formatted) {
+                priceInput.dataset.formatted = 'true';
+                
+                priceInput.addEventListener('blur', function() {
+                    let value = this.value.replace(/,/g, '');
+                    
+                    if (!isNaN(value) && value !== '') {
+                        // Format with thousand separators and 2 decimals
+                        let num = parseFloat(value);
+                        this.value = num.toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }
+                });
+                
+                priceInput.addEventListener('focus', function() {
+                    // Remove commas when editing
+                    this.value = this.value.replace(/,/g, '');
+                });
             }
         }
         
-        // Apply to all number inputs
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputs = document.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => {
-                input.addEventListener('blur', () => formatNumberInput(input));
-            });
-        });
+        // Run on load and after updates
+        setInterval(autoFormatNumber, 500);
         </script>
         """, unsafe_allow_html=True)
         
         with st.expander("🏠 Property Details", expanded=True):
-            # Use text input with number formatting
-            st.markdown('<div class="formatted-input">', unsafe_allow_html=True)
             property_price_str = st.text_input(
                 "ราคาทรัพย์สิน (Property Price)",
-                value="5,000,000",
-                help="ราคาซื้อขายทรัพย์สิน (บาท) - ใช้ลูกน้ำคั่นหลักพัน",
-                key="property_price_input"
+                value="5000000",
+                help="กรอกตัวเลขอย่างเดียว - จะ format อัตโนมัติเป็น 5,000,000.00",
+                key="property_price_input",
+                placeholder="เช่น: 5000000"
             )
-            st.markdown('</div>', unsafe_allow_html=True)
             
             # Convert to number
             try:
                 property_price = float(property_price_str.replace(',', ''))
             except:
                 property_price = 5000000.0
-                st.warning("⚠️ กรุณากรอกตัวเลขเท่านั้น (สามารถใช้ลูกน้ำได้)")
             
             down_payment = st.number_input(
                 "เงินดาวน์ (Down Payment)",  
