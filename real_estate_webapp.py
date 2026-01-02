@@ -446,7 +446,7 @@ def main():
             )
             st.caption("หน่วย: **เปอร์เซ็นต์ (%)** | ตัวอย่าง: 5% = ว่าง 0.6 เดือน/ปี")
         
-        with st.expander("Growth Assumptions", expanded=False):
+        with st.expander("📈 Growth Assumptions", expanded=False):
             rent_increase = st.number_input(
                 "การเพิ่มค่าเช่า (Annual Rent Increase)", 
                 min_value=0.0,
@@ -469,7 +469,7 @@ def main():
             )
             st.caption("หน่วย: **เปอร์เซ็นต์ต่อปี (%/year)**")
         
-        with st.expander("Timeline & Exit", expanded=False):
+        with st.expander("⏱️ Timeline & Exit", expanded=False):
             holding_period = st.number_input(
                 "ระยะเวลาถือครอง (Holding Period)", 
                 min_value=1,
