@@ -377,26 +377,69 @@ def main():
     with st.sidebar:
         st.markdown("## ⚙️ Configuration")
         
+        # Custom CSS for number inputs with thousand separators
+        st.markdown("""
+        <style>
+        .formatted-input input[type="number"] {
+            text-align: right;
+        }
+        /* Hide number input spinners */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        </style>
+        
+        <script>
+        // Format number inputs with thousand separators
+        function formatNumberInput(input) {
+            let value = input.value.replace(/,/g, '');
+            if (!isNaN(value) && value !== '') {
+                input.value = parseFloat(value).toLocaleString('en-US');
+            }
+        }
+        
+        // Apply to all number inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => formatNumberInput(input));
+            });
+        });
+        </script>
+        """, unsafe_allow_html=True)
+        
         with st.expander("🏠 Property Details", expanded=True):
-            property_price = st.number_input(
-                "ราคาทรัพย์สิน (Property Price)", 
-                min_value=0.0, 
-                value=5000000.0, 
-                step=100000.0,
-                help="ราคาซื้อขายทรัพย์สิน (บาท)",
-                format="%0.2f"
+            # Use text input with number formatting
+            st.markdown('<div class="formatted-input">', unsafe_allow_html=True)
+            property_price_str = st.text_input(
+                "ราคาทรัพย์สิน (Property Price)",
+                value="5,000,000",
+                help="ราคาซื้อขายทรัพย์สิน (บาท) - ใช้ลูกน้ำคั่นหลักพัน",
+                key="property_price_input"
             )
-            st.caption(f"💰 **฿{property_price:,.2f}** บาท (THB)")
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Convert to number
+            try:
+                property_price = float(property_price_str.replace(',', ''))
+            except:
+                property_price = 5000000.0
+                st.warning("⚠️ กรุณากรอกตัวเลขเท่านั้น (สามารถใช้ลูกน้ำได้)")
             
             down_payment = st.number_input(
-                "เงินดาวน์ (Down Payment)", 
+                "เงินดาวน์ (Down Payment)",  
                 min_value=0,
                 max_value=100,
                 value=20,
                 step=5,
                 help="สัดส่วนเงินดาวน์ต่อราคาทรัพย์สิน"
             )
-            st.caption("📊 หน่วย: **เปอร์เซ็นต์ (%)** | ตัวอย่าง: 20% = 1,000,000 บาท")
+            st.caption(f"📊 **{down_payment}%** = ฿{property_price * down_payment / 100:,.0f}")
         
         with st.expander("💳 Financing", expanded=True):
             loan_term = st.number_input(
@@ -406,7 +449,6 @@ def main():
                 value=20,
                 help="จำนวนปีที่ผ่อนชำระ"
             )
-            st.caption("📅 หน่วย: **ปี (Years)**")
             
             interest_rate = st.number_input(
                 "ดอกเบี้ย (Interest Rate)", 
@@ -414,10 +456,8 @@ def main():
                 max_value=20.0,
                 value=3.5,
                 step=0.1,
-                help="อัตราดอกเบี้ยต่อปี",
-                format="%.2f"
+                help="อัตราดอกเบี้ยต่อปี"
             )
-            st.caption("📈 หน่วย: **เปอร์เซ็นต์ต่อปี (% per year)** | ตัวอย่าง: 3.5%/ปี")
         
         with st.expander("💵 Income & Expenses", expanded=True):
             monthly_rent = st.number_input(
@@ -425,20 +465,16 @@ def main():
                 min_value=0.0, 
                 value=15000.0, 
                 step=1000.0,
-                help="รายได้จากค่าเช่าต่อเดือน",
-                format="%0.2f"
+                help="รายได้จากค่าเช่าต่อเดือน"
             )
-            st.caption(f"💵 **฿{monthly_rent:,.2f}** บาท/เดือน (THB/month)")
             
             monthly_expenses = st.number_input(
                 "ค่าใช้จ่ายรายเดือน (Monthly Expenses)", 
                 min_value=0.0, 
                 value=3000.0, 
                 step=500.0,
-                help="ค่าใช้จ่ายในการดูแลรักษาต่อเดือน (ไม่รวมผ่อน)",
-                format="%0.2f"
+                help="ค่าใช้จ่ายในการดูแลรักษาต่อเดือน (ไม่รวมผ่อน)"
             )
-            st.caption(f"💸 **฿{monthly_expenses:,.2f}** บาท/เดือน | รวม: ค่าส่วนกลาง, ภาษี, ซ่อมแซม")
             
             vacancy_rate = st.number_input(
                 "อัตราห้องว่าง (Vacancy Rate)", 
