@@ -529,7 +529,7 @@ def main():
             st.metric("IRR", f"{results['irr']:.2f}%", 
                      delta="Target Met" if results['irr'] > discount_rate else "Below Target")
         with m2:
-            st.metric("NPV", f"฿{results['npv']/1e6:.2f}M",
+            st.metric("NPV", f"฿{results['npv']:,.0f}",
                      delta_color="normal" if results['npv'] > 0 else "inverse")
         with m3:
             st.metric("Cash-on-Cash", f"{results['cash_on_cash']:.2f}%",
