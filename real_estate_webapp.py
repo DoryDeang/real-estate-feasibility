@@ -525,11 +525,10 @@ def main():
             st.metric("IRR", f"{results['irr']:.2f}%", 
                      delta="Target Met" if results['irr'] > discount_rate else "Below Target")
         with m2:
-            npv_m = results['npv'] / 1_000_000
-            st.metric("NPV", f"฿{npv_m:.2f}M",
+            st.metric("NPV", f"฿{results['npv']:,.0f}",
                      delta_color="normal" if results['npv'] > 0 else "inverse")
         with m3:
-            st.metric("Cash-on-Cash", f"{results['cash_on_cash']:.1f}%",
+            st.metric("Cash-on-Cash", f"{results['cash_on_cash']:.2f}%",
                      help="First Year Cash-on-Cash Return")
         with m4:
             st.metric("Net Yield", f"{results['net_yield']:.2f}%",
