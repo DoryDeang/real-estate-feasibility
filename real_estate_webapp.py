@@ -456,21 +456,31 @@ def main():
             )
         
         with st.expander("💵 Income & Expenses", expanded=True):
-            monthly_rent = st.number_input(
+            monthly_rent_str = st.text_input(
                 "ค่าเช่ารายเดือน (Monthly Rent)", 
-                min_value=0.0, 
-                value=15000.0, 
-                step=1000.0,
-                help="รายได้จากค่าเช่าต่อเดือน"
+                value="15000",
+                help="กรอกตัวเลขอย่างเดียว - จะ format อัตโนมัติเป็น 15,000.00",
+                key="monthly_rent_input",
+                placeholder="เช่น: 15000"
             )
             
-            monthly_expenses = st.number_input(
+            try:
+                monthly_rent = float(monthly_rent_str.replace(',', ''))
+            except:
+                monthly_rent = 15000.0
+            
+            monthly_expenses_str = st.text_input(
                 "ค่าใช้จ่ายรายเดือน (Monthly Expenses)", 
-                min_value=0.0, 
-                value=3000.0, 
-                step=500.0,
-                help="ค่าใช้จ่ายในการดูแลรักษาต่อเดือน (ไม่รวมผ่อน)"
+                value="3000",
+                help="กรอกตัวเลขอย่างเดียว - จะ format อัตโนมัติเป็น 3,000.00",
+                key="monthly_expenses_input",
+                placeholder="เช่น: 3000"
             )
+            
+            try:
+                monthly_expenses = float(monthly_expenses_str.replace(',', ''))
+            except:
+                monthly_expenses = 3000.0
             
             vacancy_rate = st.number_input(
                 "อัตราห้องว่าง (Vacancy Rate)", 
