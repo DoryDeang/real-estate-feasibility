@@ -368,14 +368,14 @@ def main():
     """, unsafe_allow_html=True)
     
     # Header Section
-    st.title("🏢 Real Estate Feasibility Pro")
+    st.title("Real Estate Feasibility Pro")
     st.markdown("Professional Financial Analysis Tool for Real Estate Investors")
     
     st.divider()
     
     # Sidebar Configuration
     with st.sidebar:
-        st.markdown("## ⚙️ Configuration")
+        st.markdown("## Configuration")
         
         
         
@@ -884,7 +884,7 @@ def main():
 
     else:
         # Welcome State
-        st.info("👈 กรุณากรอกข้อมูลทรัพย์สินใน sidebar และกด 'Run Analysis' เพื่อเริ่มการวิเคราะห์")
+        st.info("กรุณากรอกข้อมูลทรัพย์สินใน sidebar และกด 'Run Analysis' เพื่อเริ่มการวิเคราะห์")
         
         # Modern Feature Cards with custom CSS
         st.markdown("""
@@ -925,7 +925,7 @@ def main():
         with col1:
             st.markdown("""
             <div class="feature-card">
-                <div class="feature-icon">📊</div>
+                <div class="feature-icon"></div>
                 <div class="feature-title">Professional Analysis</div>
                 <div class="feature-desc">วิเคราะห์ด้วยสูตรมาตรฐาน IRR, NPV, Cap Rate</div>
             </div>
@@ -934,7 +934,7 @@ def main():
         with col2:
             st.markdown("""
             <div class="feature-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                <div class="feature-icon">📈</div>
+                <div class="feature-icon"></div>
                 <div class="feature-title">Interactive Charts</div>
                 <div class="feature-desc">กราฟแบบ interactive พร้อม breakdown รายปี</div>
             </div>
@@ -943,7 +943,7 @@ def main():
         with col3:
             st.markdown("""
             <div class="feature-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                <div class="feature-icon">⚡</div>
+                <div class="feature-icon"></div>
                 <div class="feature-title">Real-time Results</div>
                 <div class="feature-desc">คำนวณทันที พร้อม sensitivity analysis</div>
             </div>
