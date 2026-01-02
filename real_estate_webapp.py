@@ -387,7 +387,7 @@ def main():
                 step=100000.0,
                 help="ราคาซื้อขายทรัพย์สิน (บาท)"
             )
-            st.caption(f"💰 **฿{property_price:,.2f}**")
+            st.caption(f"**฿{property_price:,.2f}**")
             
             down_payment = st.number_input(
                 "เงินดาวน์ (Down Payment)",  
@@ -425,7 +425,7 @@ def main():
                 step=1000.0,
                 help="รายได้จากค่าเช่าต่อเดือน"
             )
-            st.caption(f"💵 **฿{monthly_rent:,.2f}**")
+            st.caption(f"**฿{monthly_rent:,.2f}**")
             
             monthly_expenses = st.number_input(
                 "ค่าใช้จ่ายรายเดือน (Monthly Expenses)",
@@ -434,7 +434,7 @@ def main():
                 step=500.0,
                 help="ค่าใช้จ่ายในการดูแลรักษาต่อเดือน (ไม่รวมผ่อน)"
             )
-            st.caption(f"💸 **฿{monthly_expenses:,.2f}**")
+            st.caption(f"**฿{monthly_expenses:,.2f}**")
             
             vacancy_rate = st.number_input(
                 "อัตราห้องว่าง (Vacancy Rate)", 
