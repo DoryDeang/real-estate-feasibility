@@ -561,19 +561,19 @@ def main():
             k4.info(f"**Cap Rate**\n\n{results['cap_rate']:.2f}%")
             
         with tab2:
-            st.markdown("#### 📊 รายละเอียดรายปี (Year-by-Year Breakdown)")
+            st.markdown("#### 📊 Year-by-Year Breakdown (รายละเอียดรายปี)")
             
             # Format dataframe for display with Thai headers
             display_df = results['cash_flow_table'].copy()
             
-            # Rename columns to Thai
+            # Rename columns to English with Thai
             display_df = display_df.rename(columns={
-                'Year': 'ปี',
-                'Rental Income': 'รายได้ค่าเช่า',
-                'Expenses': 'ค่าใช้จ่าย',
-                'Mortgage': 'ผ่อนบ้าน',
-                'Cash Flow': 'กระแสเงินสด',
-                'Cumulative Cash Flow': 'กระแสเงินสดสะสม'
+                'Year': 'Year (ปี)',
+                'Rental Income': 'Rental Income (รายได้ค่าเช่า)',
+                'Expenses': 'Expenses (ค่าใช้จ่าย)',
+                'Mortgage': 'Mortgage (ผ่อนบ้าน)',
+                'Cash Flow': 'Cash Flow (กระแสเงินสด)',
+                'Cumulative Cash Flow': 'Cumulative (กระแสเงินสดสะสม)'
             })
             
             # Apply Excel-like styling
@@ -581,8 +581,14 @@ def main():
                 # Create styler object
                 styled = df.style
                 
-                # Format currency columns
-                currency_cols = ['รายได้ค่าเช่า', 'ค่าใช้จ่าย', 'ผ่อนบ้าน', 'กระแสเงินสด', 'กระแสเงินสดสะสม']
+                # Format currency columns (updated names)
+                currency_cols = [
+                    'Rental Income (รายได้ค่าเช่า)',
+                    'Expenses (ค่าใช้จ่าย)',
+                    'Mortgage (ผ่อนบ้าน)',
+                    'Cash Flow (กระแสเงินสด)',
+                    'Cumulative (กระแสเงินสดสะสม)'
+                ]
                 
                 # Apply number formatting
                 format_dict = {col: '฿{:,.0f}' for col in currency_cols}
@@ -630,7 +636,10 @@ def main():
                         return 'color: #4CAF50'
                     return ''
                 
-                styled = styled.applymap(highlight_negative, subset=['กระแสเงินสด', 'กระแสเงินสดสะสม'])
+                styled = styled.applymap(
+                    highlight_negative, 
+                    subset=['Cash Flow (กระแสเงินสด)', 'Cumulative (กระแสเงินสดสะสม)']
+                )
                 
                 return styled
             
