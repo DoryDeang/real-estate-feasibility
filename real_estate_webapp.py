@@ -397,9 +397,9 @@ def main():
                 step=5,
                 help="สัดส่วนเงินดาวน์ต่อราคาทรัพย์สิน"
             )
-            st.caption(f"📊 **{down_payment}%** = ฿{property_price * down_payment / 100:,.0f}")
+            st.caption(f"**{down_payment}%** = ฿{property_price * down_payment / 100:,.0f}")
         
-        with st.expander("💳 Financing", expanded=True):
+        with st.expander("Financing", expanded=True):
             loan_term = st.number_input(
                 "ระยเวลาผ่อน (Loan Term)", 
                 min_value=1, 
@@ -517,7 +517,7 @@ def main():
             )
         
         # 1. Executive Summary Cards
-        st.markdown("### 🎯 Executive Summary")
+        st.markdown("### Executive Summary")
         
         m1, m2, m3, m4 = st.columns(4)
         
