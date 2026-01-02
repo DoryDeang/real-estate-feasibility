@@ -412,19 +412,24 @@ def main():
             st.session_state.expenses_formatted = "3,000.00"
         
         with st.expander("🏠 Property Details", expanded=True):
-            st.text_input(
+            # Get raw input
+            price_raw = st.text_input(
                 "ราคาทรัพย์สิน (Property Price)",
-                value=st.session_state.price_formatted,
-                help="กรอกตัวเลข (เช่น 5000000) แล้วกด Enter → จะเปลี่ยนเป็น 5,000,000.00",
-                key="price_input",
-                on_change=update_price_format
+                value="5000000" if 'price_formatted' not in st.session_state else st.session_state.price_formatted.replace(',', ''),
+                help="กรอกตัวเลข (เช่น 5000000) ช่องจะแสดงค่าที่ format แล้วด้านล่าง",
+                key="price_raw_input"
             )
             
-            # Get number for calculation
+            # Format and display
             try:
-                property_price = float(st.session_state.price_formatted.replace(',', ''))
+                num = float(price_raw.replace(',', ''))
+                formatted = f"{num:,.2f}"
+                st.session_state.price_formatted = formatted
+                property_price = num
+                st.success(f"💰 **฿{formatted}**")
             except:
                 property_price = 5000000.0
+                st.error("⚠️ กรุณากรอกตัวเลขเท่านั้น")
             
             down_payment = st.number_input(
                 "เงินดาวน์ (Down Payment)",  
@@ -455,31 +460,39 @@ def main():
             )
         
         with st.expander("💵 Income & Expenses", expanded=True):
-            st.text_input(
+            rent_raw = st.text_input(
                 "ค่าเช่ารายเดือน (Monthly Rent)", 
-                value=st.session_state.rent_formatted,
-                help="กรอกตัวเลข (เช่น 15000) แล้วกด Enter → จะเปลี่ยนเป็น 15,000.00",
-                key="rent_input",
-                on_change=update_rent_format
+                value="15000" if 'rent_formatted' not in st.session_state else st.session_state.rent_formatted.replace(',', ''),
+                help="กรอกตัวเลข (เช่น 15000)",
+                key="rent_raw_input"
             )
             
             try:
-                monthly_rent = float(st.session_state.rent_formatted.replace(',', ''))
+                num = float(rent_raw.replace(',', ''))
+                formatted = f"{num:,.2f}"
+                st.session_state.rent_formatted = formatted
+                monthly_rent = num
+                st.success(f"💵 **฿{formatted}**")
             except:
                 monthly_rent = 15000.0
+                st.error("⚠️ กรุณากรอกตัวเลขเท่านั้น")
             
-            st.text_input(
+            expenses_raw = st.text_input(
                 "ค่าใช้จ่ายรายเดือน (Monthly Expenses)", 
-                value=st.session_state.expenses_formatted,
-                help="กรอกตัวเลข (เช่น 3000) แล้วกด Enter → จะเปลี่ยนเป็น 3,000.00",
-                key="expenses_input",
-                on_change=update_expenses_format
+                value="3000" if 'expenses_formatted' not in st.session_state else st.session_state.expenses_formatted.replace(',', ''),
+                help="กรอกตัวเลข (เช่น 3000)",
+                key="expenses_raw_input"
             )
             
             try:
-                monthly_expenses = float(st.session_state.expenses_formatted.replace(',', ''))
+                num = float(expenses_raw.replace(',', ''))
+                formatted = f"{num:,.2f}"
+                st.session_state.expenses_formatted = formatted
+                monthly_expenses = num
+                st.success(f"💸 **฿{formatted}**")
             except:
                 monthly_expenses = 3000.0
+                st.error("⚠️ กรุณากรอกตัวเลขเท่านั้น")
             
             vacancy_rate = st.number_input(
                 "อัตราห้องว่าง (Vacancy Rate)", 
