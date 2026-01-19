@@ -1,0 +1,9 @@
+[server]
+runOnSave = true
+fileWatcherType = "poll"
+
+[client]
+showErrorDetails = true
+
+[runner]
+fastReruns = true
